@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button id="changeText">Change Text</button> <!--este es el boton de Decomposition-->
+    <p class="message">Hello, world!</p> <!--lo que se muestra antes del click, o sea nada-->
+    <div id="sourceText">Text changed!</div>
+    <p class="message highlight">This is a highlighted message.</p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('#changeText');
+            
+            button.addEventListener('click', function() {
+                // Retrieve text from the source element
+                const newText = document.querySelector('#sourceText').textContent;
+                const message = document.querySelector('.message');
+                message.textContent = newText; //aqui va el texto que quiero que agarre de la bd
+                
+            });
+        });
+    </script>
+</body>
+</html>
+
