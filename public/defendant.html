@@ -152,6 +152,9 @@
   /*align-items: center; /* Center vertically, if needed */
   /*justify-content: center;  Center horizontally, if applicable */
   text-align: center; /* Center text lines */
+  max-height: 150px; /* Adjust this value to fit the card size */
+  overflow-y: auto; /* Adds a scrollbar if the content overflows */
+  margin: 10px; /* Adjust margin as needed */
 }
 
 
@@ -350,14 +353,7 @@
         <div class="text-style1">
             <br>Prediction
           </div>
-      <div class="text-style2">
-          <!-- Default text or dynamic content here -->
-          <span class="yellow-text">Generative Model:</span><br>
-          <span class="white-text">Stand-alone: <span id="standalone">loading...</span><br>
-          Joint: <span id="joint">loading...</span>
-          <br>
-          Discriminative Model: <!--MATEOOOOOOOOOOOOO AQUI PONER EL OUTPUT DE LA BD CORRESPONDIENTE A SUMMARY-->
-          Conditional: <span id="conditional">loading...</span>
+          <div class="text-style2" id="prediction-output">loading...</div>
         </span>
       </div>
     </div>
@@ -369,19 +365,7 @@
         <div class="text-yellow">
             <br>Legal Decomposition
           </div>
-    <div class="text-style2">
-        <!-- Default text or dynamic content here -->
-        <span class="yellow-text">Predictive Model:</span><br>
-        <span class="white-text">Legal Domain: Contract Law<br> <!--MATEOOOOOOOOOOOOO AQUI PONER EL OUTPUT DE LA BD CORRESPONDIENTE A SUMMARY-->
-            - Contract Formation<br>
-            -- Offer<br>
-                 ---- Invitation to Treat<br>
-                 ---- Specificity of Terms<br>
-            -- Acceptance<br>
-           ----- Express Acceptance<br>
-           ----- Non-Monetary  Consideration</span><br>
-
-      </div>
+        <div class="text-style2" id="legal-decomposition-output">loading...</div>
     </div>
 </div>
   
@@ -391,18 +375,7 @@
         <div class="text-style1">
             <br>Legal Entities 
           </div>
-      <div class="text-style2">
-          <!-- Default text or dynamic content here -->
-          <span class="yellow-text">Predictive Model:</span><br> <!--MATEOOOOOOOOOOOOO AQUI PONER EL OUTPUT DE LA BD CORRESPONDIENTE A SUMMARY-->
-          <span class="white-text">Legal Domain: Contract Law<br>
-              - Contract Formation<br>
-              -- Offer<br>
-                   ---- Invitation to Treat<br>
-                   ---- Specificity of Terms<br>
-              -- Acceptance<br>
-             ----- Express Acceptance<br>
-             ----- Non-Monetary  Consideration</span><br>
-  
+        <div class="text-style2" id="legal-entities-output">loading...</div>
         </div>
       </div>
   </div>
@@ -434,26 +407,27 @@
 
   let csvData = []; // Global array to store CSV data
 
-  document.addEventListener('DOMContentLoaded', function() {
-    Papa.parse('/public/extracted_data_enhanced1.csv', {
-        download: true,
-        header: true,
-        complete: function(results) {
-            csvData = results.data; // Store the parsed data
-            var fileSelector = document.getElementById('fileSelector');
-            
-            // Populate the dropdown with filenames
-            csvData.forEach(function(row) {
-                if (row.filename) { // Ensure there's a filename
-                    var option = document.createElement('option');
-                    option.value = row.filename;
-                    option.textContent = row.filename;
-                    fileSelector.appendChild(option);
-                }
-            });
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+    Papa.parse('/public/extracted_data_enhanced.csv', { // Make sure the file name is correct
+      download: true,
+      header: true,
+      complete: function(results) {
+        csvData = results.data;
+        var fileSelector = document.getElementById('fileSelector');
+        
+        // Populate the dropdown with filenames
+        csvData.forEach(function(row) {
+          if (row.filename) { 
+            var option = document.createElement('option');
+            option.value = row.filename;
+            option.textContent = row.filename;
+            fileSelector.appendChild(option);
+          }
+        });
+      }
     });
-});
+  });
+
 
 // The rest of your script...
 
@@ -491,35 +465,41 @@
   // });
 
   document.getElementById('Decompose').addEventListener('click', function() {
-    const fileSelector = document.getElementById('fileSelector');
-    const selectedFilename = fileSelector.value;
-    if (!selectedFilename) {
-        alert("Please select a file first.");
-        return; // Stop if no file is selected
-    }
+  const fileSelector = document.getElementById('fileSelector');
+  const selectedFilename = fileSelector.value;
 
-    const selectedRow = csvData.find(row => row.filename === selectedFilename);
-    if (!selectedRow) {
-        console.error('Selected file not found in CSV data');
-        return; // Stop if the file is not found (shouldn't happen if UI is consistent with data)
-    }
+  if (!selectedFilename) {
+    alert("Please select a file first.");
+    return; // Stop if no file is selected
+  }
 
-    // These are the lines that may be causing your error
-    // Ensure elements with these IDs exist in your HTML
-    document.getElementById('standalone').textContent = selectedRow.SUMMARY || 'Not found';
-    document.getElementById('conditional').textContent = selectedRow.LEGAL_ENTITIES || 'Not found';
+  const selectedRow = csvData.find(row => row.filename === selectedFilename);
 
-    // If you have multiple .text-style2 elements you need to update each
-    const decompositionElements = document.querySelectorAll('.text-style2');
-    decompositionElements.forEach(function(element) {
-        element.textContent = selectedRow.Legal_decomposition || 'Not found';
-    });
+  if (!selectedRow) {
+    console.error('Selected file not found in CSV data');
+    return; // Stop if the file is not found (shouldn't happen if UI is consistent with data)
+  }
 
-  console.log(document.getElementById('standalone'));
-  console.log(document.getElementById('conditional'));
-  console.log(document.querySelector('.text-style2'));
+  // Ensure these IDs match those you have added to your HTML elements
+  const predictionOutputElement = document.getElementById('prediction-output');
+  const legalEntitiesOutputElement = document.getElementById('legal-entities-output');
+  const legalDecompositionOutputElement = document.getElementById('legal-decomposition-output');
 
+  // Set the text content and ensure the element is visible
+  if (predictionOutputElement) {
+    predictionOutputElement.textContent = selectedRow.SUMMARY || 'Summary not found';
+    predictionOutputElement.style.display = 'block'; // Make the element visible
+  }
+  if (legalEntitiesOutputElement) {
+    legalEntitiesOutputElement.textContent = selectedRow.LEGAL_ENTITIES || 'Legal entities not found';
+    legalEntitiesOutputElement.style.display = 'block'; // Make the element visible
+  }
+  if (legalDecompositionOutputElement) {
+    legalDecompositionOutputElement.textContent = selectedRow.Legal_decomposition || 'Legal decomposition not found';
+    legalDecompositionOutputElement.style.display = 'block'; // Make the element visible
+  }
 });
+
 
 
 
