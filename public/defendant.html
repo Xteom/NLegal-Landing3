@@ -107,11 +107,11 @@
 
 .pdf-container {
   position: absolute;
-  top: 61%;
-  left: 50%;
+  top: 135%;
+  left: 65%;
   transform: translate(-50%, -50%);
   width: 60%; /* Adjust as necessary */
-  height: 100%; /* Adjust as necessary */
+  height: 200%; /* Adjust as necessary */
   border: 1px solid #ccc; /* Optional, for visual styling */
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Optional, for visual styling */
   margin-top: 80px;
@@ -144,7 +144,7 @@
   top: 100px; /* Adjust based on the desired space between .card-purple and the text */
   padding: 0 20px; /* Adds padding on the left and right */
   /* Existing .text-style2 styles */
-  color: #000000;
+  color: #e6e6e6;
   font-size: 24px;
   font-family: 'Roboto', sans-serif;
   line-height: 31px;
@@ -152,11 +152,30 @@
   /*align-items: center; /* Center vertically, if needed */
   /*justify-content: center;  Center horizontally, if applicable */
   text-align: center; /* Center text lines */
-  max-height: 150px; /* Adjust this value to fit the card size */
+  max-height: 250px; /* Adjust this value to fit the card size */
   overflow-y: auto; /* Adds a scrollbar if the content overflows */
   margin: 10px; /* Adjust margin as needed */
 }
 
+/* For webkit browsers like Chrome, Safari, and Edge */
+.text-style2::-webkit-scrollbar {
+  width: 8px; /* Adjust the width of the scrollbar */
+}
+
+.text-style2::-webkit-scrollbar-track {
+  background: transparent; /* Makes scrollbar track transparent */
+}
+
+.text-style2::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5); /* Makes scrollbar thumb semi-transparent white */
+  border-radius: 4px; /* Optional: Adds border-radius to the scrollbar thumb */
+}
+
+/* For Firefox */
+.text-style2 {
+  scrollbar-width: thin; /* Makes scrollbar 'thin' */
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent; /* Sets the scrollbar color and track color */
+}
 
 .card-small-dark {
   position: relative; /* Ensures a positioning context for descendants */
@@ -201,9 +220,9 @@
   }
 
   .card-small-dark3 {
-  position: relative; /* Ensures a positioning context for descendants */
-  top: -250px;
-  right: -1000px;
+  position: relative; /* or 'absolute' if within a positioned parent container */
+  top: 750px; /* Adjust this value based on the total height of the above cards including any margin/padding */
+  left: 26px; /* Match this with the 'left' values of other cards */
   width: 476px;
   height: 426px;
   background-color: #161616;
@@ -256,8 +275,23 @@
     border-radius: 34px;
   }
 
-
-
+  .card-small-dark-hierarchy {
+    
+  position: relative; /* or 'absolute' if within a positioned parent container */
+  top: 400px; /* Adjust this value based on the total height of the above cards including any margin/padding */
+  left: 26px; /* Match this with the 'left' values of other cards */
+  width: 476px;
+  height: 426px;
+  background-color: #161616; /* Match or differentiate the style */
+  border: 1px solid #323232;
+  border-radius: 53px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  z-index: 1; /* Adjust if needed */
+}
 
 
 /*Text Colors*/
@@ -380,10 +414,17 @@
       </div>
   </div>
 
+  <div class="card card-small-dark-hierarchy">
+    <div class="card card-blue"> <!-- Use a different color or class if you like -->
+        <!-- Card Title -->
+        <div class="text-style1">
+            Hierarchical Structuring
+        </div>
+        <!-- Card Content -->
+        <div class="text-style2" id="hierarchical-structuring-output">loading...</div>
+    </div>
+</div>
 
-  
- 
-  
   <div class="image">
     <!-- Image background set through CSS -->
   </div>
@@ -442,7 +483,7 @@
     if (!selectedRow) return; // File not found in CSV
 
     // Update the web page with data from the selected row
-    document.getElementById('standalone').textContent = selectedRow.SUMMARY;
+    document.getElementById('standalone').textContent = selectedRow.PREDICTION;
     document.getElementById('conditional').textContent = selectedRow.LEGAL_ENTITIES;
     // Assuming you have an element with an ID or a class where you want to show Legal Decomposition
     document.querySelector('.text-style2').textContent = selectedRow.Legal_decomposition;
@@ -487,7 +528,7 @@
 
   // Set the text content and ensure the element is visible
   if (predictionOutputElement) {
-    predictionOutputElement.textContent = selectedRow.SUMMARY || 'Summary not found';
+    predictionOutputElement.textContent = selectedRow.PREDICTION || 'Summary not found';
     predictionOutputElement.style.display = 'block'; // Make the element visible
   }
   if (legalEntitiesOutputElement) {
@@ -498,6 +539,14 @@
     legalDecompositionOutputElement.textContent = selectedRow.Legal_decomposition || 'Legal decomposition not found';
     legalDecompositionOutputElement.style.display = 'block'; // Make the element visible
   }
+
+  const hierarchicalStructuringOutputElement = document.getElementById('hierarchical-structuring-output');
+  if (hierarchicalStructuringOutputElement) hierarchicalStructuringOutputElement.textContent = selectedRow.HIERARCHICAL_STRUCTURING || 'Hierarchical structuring data not found';
+
+  // Ensure elements are visible
+  [predictionOutputElement, legalEntitiesOutputElement, legalDecompositionOutputElement, hierarchicalStructuringOutputElement].forEach(element => {
+    if (element) element.style.display = 'block'; // Make the element visible
+  });
 });
 
 

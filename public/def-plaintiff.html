@@ -97,24 +97,7 @@
 }
 
 .button-lawsuit {
-  
-  cursor: pointer;
-  position: relative; /* Add position relative */
-    top: 50px; /* Adjusted top value to move the button down */
-    left: 70px;
-    width: 172px;
-    height: 41px;
-    padding: 0px 8px;
-    border: 0;
-  box-sizing: border-box;
-  border-radius: 24px;
-  background-color: #ffffff;
-  color: #161616;
-  font-size: 19px;
-  font-family: "Source Sans Pro";
-  font-weight: 500;
-  line-height: 25px;
-  outline: none;
+  margin-top: 10px; /* Add some space above the button */
 }
 
 .text {
@@ -133,15 +116,38 @@
   width: 948px;
   height: 300px;
   background-color: rgba(255, 255, 255, 0.5);
-  /*background-color: #323232;*/
   border-radius: 24px;
   margin-left: 20px;
   margin-top: 40px;
+  padding: 10px; /* Reduced padding to allow more space for the textarea */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align the child elements */
+}
+
+#textInput {
+  width: 100%; /* Make the textarea take up the full width of its parent */
+  height: 80%; /* Adjust the height to fill the space, leaving room for the button */
+  box-sizing: border-box; /* Include padding and border in the element's total dimensions */
+  padding: 8px; /* Provide some internal spacing for the text */
+  border-radius: 5px; /* Optional: Adds rounded corners to the textarea */
+  border: 1px solid rgba(0, 0, 0, 0.2); /* Makes the border less noticeable */
+  background-color: transparent; /* Makes the textarea's background transparent */
+  resize: none; /* Optional: Prevents the user from resizing the textarea */
+  color: #000; /* Sets the text color to black, adjust as needed */
+}
+
+.card textarea, .card button {
+  font-size: 1vw; /* Example of responsive font size based on the viewport width */
+}
+
+/* Adjust the font size of textarea and button text to be more responsive */
+#textInput, .card button {
+  font-size: calc(0.5vw + 0.5vh); /* Combines viewport width and height for a balanced scaling */
 }
 
 .card-2 {
-
- position: relative; 
+  position: relative; 
   top: -480px;
   width: 500px; 
   height: 500px;
@@ -152,27 +158,32 @@
   border-radius: 50.24px;
   border: 1px solid #323232;
   box-sizing: border-box;
-  /*top: 1002px or -1290px;
-  left: 1028px;
-  width: 388px;
-  height: 868px or 1585;
-  background-color: #161616;
-  border-radius: 50.24px;
-  border: 1px solid #323232;
-  box-sizing: border-box;*/
+  overflow-y: auto; /* This line adds a scrollbar if the content overflows */
+  
 }
 
+.card-2 .card-title {
+  color: #ffffff; /* Ensures the text is white */
+  text-align: center; /* Centers the title text */
+  font-size: 24px; /* Example font size, adjust as needed */
+  font-family: "Source Sans Pro", sans-serif; /* Example font family, adjust as needed */
+  margin-top: 20px; /* Adds space at the top inside the card */
+  margin-bottom: 20px; /* Adds space between the title and the content */
+}
 .c2-text {
   position: absolute;
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  color: white; /* This ensures the text is white */
   font-size: 19px;
   font-family: "EB Garamond";
   text-align: center;
   text-align: justify; /* Justify text */
   width: 80%; /* Adjust width as needed */
+  /* Ensure the container can scroll if content overflows. */
+  max-height: 90%; /* Adjust based on your design needs */
+  overflow-y: auto; /* Adds scrollbar to this element specifically if content overflows */
 }
 
 
@@ -198,55 +209,79 @@
   z-index: 5;
 }
 
-
-
-
-
-
-
 </style>
 </head>
 <body>
-  <!-- Image container -->
   <div class="container">
     <img src="./images/library.jpeg" alt="Suit Image">
   </div>
-<div class="form-section">
+  <div class="form-section">
     <div class="transparent-rectangle">
-  <!--<h1>NLegal</h1>-->
-  <a href="legal_decomp.html">
-    <img src="./images/logo-zoomin.jpg">
-  </a>
+      <a href="legal_decomp.html">
+        <img src="./images/logo-zoomin.jpg">
+      </a>
     </div>
-
-
-    <!-- Button -->
     <a href="contract-input.html"><button class="button">Create a Contract</button></a>
-
-
-<button class="button-lawsuit">Start a Lawsuit</button>
-
-<div class="text">
     <br>
-</div>
+    <br>
+    <br>
 
-<div class="card"></div>
-<div class="card-2">
-    
-    <div class="c2-text">
-        <h2 >Consejo Legal...</h2>
-        <br>
-        Recuerda que tienes 15 días para presentar tu amparo indirecto, a partir del día en que se publique la norma que vulnere tus derechos, en el Diario Oficial de la Federación o en las gacetas de cada entidad federativa, o a partir de que se te notifique el acto de la autoridad que afecte tus derechos.<br> 
-   <br> Si la mera existencia de la norma que publicó la autoridad te afecta, sin que tenga que ser aplicada, tienes 30 días para presentar tu amparo indirecto...</p>
-</div>
-
-</div>
+    <div class="text">
+    </div>
+    <div class="card">
+      <textarea id="textInput"></textarea><br>
+      <button class="button-lawsuit" onclick="processText()">I want legal assistance</button>
+    </div>
+    <div class="card-2">
+      <h2 class="card-title">Consejo legal...</h2> <!-- Title added here -->
+      <div class="c2-text" id="resultContainer">
+          <!-- Results from callGenerationEndpoint will be displayed here -->
+      </div>
+  </div>
+    </div>
+  </div>
 
 <a href="contract-input.html"><button class="button-upload">Create</button></a>
 
+<script> 
+  async function callGenerationEndpoint(text) {
+        const url = 'https://api-poc-v67w2w32lq-uc.a.run.app/generation/';
+        const data = { text: text };
 
-  
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+      }
+
+      function processText() {
+          const textInput = document.getElementById("textInput").value;
+          if (textInput) {
+              callGenerationEndpoint(textInput).then(result => {
+                  const resultContainer = document.getElementById("resultContainer");
+                  resultContainer.innerText = JSON.stringify(result, null, 2);
+              }).catch(error => {
+                  const resultContainer = document.getElementById("resultContainer");
+                  resultContainer.innerText = `Error: ${error.message}`;
+              });
+          } else {
+              alert("Please enter some text before clicking help!");
+          }
+      }
 </script>
 
 </body>
