@@ -303,6 +303,14 @@
               alert("Please enter some text before clicking help!");
           }
       }
+
+      document.getElementById('textInput').addEventListener('keydown', function(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault(); // Prevent the default action to avoid submitting the form or creating a new line
+            processText(); // Call the processText function
+        }
+      });
+
 </script>
 
 </body>
