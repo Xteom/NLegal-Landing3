@@ -147,7 +147,7 @@
 }
 
 .card-2 {
-  position: relative; 
+  position: relative; /* Ensures children are positioned relative to this container */
   top: -480px;
   width: 500px; 
   height: 500px;
@@ -158,8 +158,8 @@
   border-radius: 50.24px;
   border: 1px solid #323232;
   box-sizing: border-box;
-  overflow-y: auto; /* This line adds a scrollbar if the content overflows */
-  
+  overflow-y: auto; /* Adds a scrollbar if the content overflows */
+  padding-top: 60px; /* Added padding at the top for the title */
 }
 
 .card-2 .card-title {
@@ -172,8 +172,8 @@
 }
 .c2-text {
   position: absolute;
-  top: 45%;
-  left: 50%;
+  top: 70%;
+  left: 49%;
   transform: translate(-50%, -50%);
   color: white; /* This ensures the text is white */
   font-size: 19px;
@@ -186,6 +186,27 @@
   overflow-y: auto; /* Adds scrollbar to this element specifically if content overflows */
 }
 
+/* Styles the scrollbar track (background) */
+.card-2::-webkit-scrollbar-track, .c2-text::-webkit-scrollbar-track {
+  background-color: transparent; /* Makes the track transparent */
+}
+
+/* Styles the scrollbar thumb (the part that you drag) */
+.card-2::-webkit-scrollbar-thumb, .c2-text::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  border-radius: 10px; /* Optional: Rounds the corners of the scrollbar thumb */
+}
+
+/* Styles the scrollbar itself (width, etc.) */
+.card-2::-webkit-scrollbar, .c2-text::-webkit-scrollbar {
+  width: 8px; /* Adjust the width of the scrollbar */
+}
+
+/* Styles the scrollbar track (background) and thumb (the part that you drag) */
+.card-2, .c2-text {
+  scrollbar-width: thin; /* Makes the scrollbar thinner */
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent; /* Sets the thumb color and track color */
+}
 
 
 .button-upload {
