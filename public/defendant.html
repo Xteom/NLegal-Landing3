@@ -449,7 +449,7 @@
   let csvData = []; // Global array to store CSV data
 
     document.addEventListener('DOMContentLoaded', function() {
-    Papa.parse('/public/extracted_data_enhanced.csv', { // Make sure the file name is correct
+    Papa.parse('/extracted_data_enhanced.csv', { // Make sure the file name is correct
       download: true,
       header: true,
       complete: function(results) {
