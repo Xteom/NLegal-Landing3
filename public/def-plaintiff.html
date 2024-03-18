@@ -96,9 +96,8 @@
   margin-top: 20px;
 }
 
-.button-lawsuit {
-  margin-top: 10px; /* Add some space above the button */
-}
+
+
 
 .text {
     margin-top: 40px; 
@@ -113,7 +112,7 @@
 .card {
   top: -556px;
   left: 40px;
-  width: 948px;
+  width: 800px;
   height: 300px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 24px;
@@ -131,10 +130,15 @@
   box-sizing: border-box; /* Include padding and border in the element's total dimensions */
   padding: 8px; /* Provide some internal spacing for the text */
   border-radius: 5px; /* Optional: Adds rounded corners to the textarea */
-  border: 1px solid rgba(0, 0, 0, 0.2); /* Makes the border less noticeable */
+  border: 1px solid transparent; /* Makes the border less noticeable */
   background-color: transparent; /* Makes the textarea's background transparent */
   resize: none; /* Optional: Prevents the user from resizing the textarea */
   color: #000; /* Sets the text color to black, adjust as needed */
+}
+
+#textInput::placeholder {
+  color: #303030; /* Darker shade for the placeholder text */
+  opacity: 1; /* Ensure full opacity */
 }
 
 .card textarea, .card button {
@@ -209,26 +213,30 @@
 }
 
 
-.button-upload {
+.button-lawsuit {
   cursor: pointer;
-  position: relative; 
-  top: -1550px;
-  left: 816px;
-  width: 172px;
-  height: 41px;
-  padding: 0px 8px;
-  border: 0;
+  position: relative;
+  top: 20px;
+  left: 0;
+  width: 233px;
+  height: 56px;
+  padding: 0 8px;
+  border: none;
   box-sizing: border-box;
   border-radius: 24px;
-  background-color: #ffffff;
-  color: #161616;
-  font-size: 24px;
-  font-family: "Source Sans Pro";
-  font-weight: 500;
-  line-height: 31px;
+  background-color: #cc0ed6;
+  color: #ffffff;
+  font-size: 18px !important; /* Ensuring this rule has the highest specificity */
+  font-family: "Source Sans Pro", sans-serif; /* Specifying a fallback font */
+  line-height: normal; /* Adjusting line height for better alignment */
+  text-align: center; /* Ensuring the text is centered */
+  display: block; /* Display as block */
+  margin: 0 auto 20px; /* Auto margins for horizontal centering, 20px margin at the bottom */
   outline: none;
-  z-index: 5;
+  z-index: 1000;
 }
+
+
 
 </style>
 </head>
@@ -250,7 +258,7 @@
     <div class="text">
     </div>
     <div class="card">
-      <textarea id="textInput"></textarea><br>
+      <textarea id="textInput" placeholder="How may I assist you? Please note that our advanced models require a short period to generate responses. We kindly request your patience during this process and thank you in advance for your understanding."></textarea><br>
       <button class="button-lawsuit" onclick="processText()">I want legal assistance</button>
     </div>
     <div class="card-2">
